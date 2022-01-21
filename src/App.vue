@@ -1,28 +1,28 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <MyHeader />
+    <br />
+    <!-- 一级路由导航内容区 -->
+    <router-view></router-view>
+    <br />
+    <!-- 方法一：判断当路径为/home或/search时显示Footer -->
+    <!-- <MyFooter v-if="$route.path === '/home' || $route.path === '/search'" /> -->
+
+    <!-- 方法一：判断路由配置上的meta消息，觉得是否显示Footer -->
+    <MyFooter v-if="!$route.meta.noShowFooter" />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import MyHeader from "@/components/MyHeader";
+import MyFooter from "@/components/MyFooter";
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    MyHeader,
+    MyFooter,
+  },
+};
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+<style></style>
