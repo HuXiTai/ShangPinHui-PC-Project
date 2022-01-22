@@ -62,7 +62,7 @@ export default {
         当重复点击时会报错：Uncaught (in promise) NavigationDuplicated: Avoided redundant navigation to current location 
         原因：因为.push返回的是promise实例则点击第二次时会调用reject当reject没有处理时会报错
         解决方法：
-          一：push("路径","()=>{}","()=>{}") //
+          一：push("路径","()=>{}","()=>{}") //第二/三个回调同resolve/reject
           二：push("路径").catch(() => {})
           三：重写push和replace-->/router/index.js-10
       */

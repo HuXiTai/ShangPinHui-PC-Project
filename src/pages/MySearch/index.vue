@@ -1,5 +1,7 @@
 <template>
-  <div>MySearch</div>
+  <div>
+    <MyNavType />
+  </div>
 </template>
 
 <script>
