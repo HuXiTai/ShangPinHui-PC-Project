@@ -3,8 +3,8 @@ import "nprogress/nprogress.css";
 import Nprogress from "nprogress";
 
 //创建axios新实例
-export default myAxios = axios.create({
-  baseURL: "http://39.98.123.211/api", //公共路径为http://39.98.123.211/api
+const myAxios = axios.create({
+  baseURL: "api1/api", //公共路径为http://39.98.123.211/api
   timeout: 10000, //最大请求时间
 });
 
@@ -28,3 +28,5 @@ myAxios.interceptors.response.use(
     return Promise.reject(err); //失败时返回失败的promise值为err，交给catch处理
   }
 );
+
+export default myAxios;
