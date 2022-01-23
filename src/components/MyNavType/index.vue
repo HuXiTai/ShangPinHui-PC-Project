@@ -2,33 +2,29 @@
   <!-- 商品分类导航 -->
   <div class="type-nav">
     <div class="container">
-      <h2 class="all">全部商品分类</h2>
-      <nav class="nav">
-        <a href="###">服装城</a>
-        <a href="###">美妆馆</a>
-        <a href="###">尚品汇超市</a>
-        <a href="###">全球购</a>
-        <a href="###">闪购</a>
-        <a href="###">团购</a>
-        <a href="###">有趣</a>
-        <a href="###">秒杀</a>
-      </nav>
-      <div class="sort">
-        <div class="all-sort-list2">
-          <!-- 不使用hover实现移入移出效果 -->
-          <div
-            class="item"
-            v-for="(one, index) of baseCategoryList"
-            :key="one.categoryId"
-            :class="{ item_on: enterIndex === index }"
-            @mouseenter="enterIndexFn(index)"
-            @mouseleave="enterIndex = -1"
-          >
-            <h3>
-              <!-- <a href="">{{ one.categoryName }}</a> -->
+      <div
+        @mouseenter="isShow = true"
+        @mouseleave="isShow = false || $route.path === '/home'"
+      >
+        <h2 class="all">全部商品分类</h2>
+        <!-- 用事件委托去写点击跳转 -->
+        <transition name="sort">
+          <div class="sort" @click="toSearch" v-show="isShow">
+            <div class="all-sort-list2">
+              <!-- 不使用hover实现移入移出效果 -->
+              <div
+                class="item"
+                v-for="(one, index) of baseCategoryList"
+                :key="one.categoryId"
+                :class="{ item_on: enterIndex === index }"
+                @mouseenter="enterIndexFn(index)"
+                @mouseleave="enterIndex = -1"
+              >
+                <h3>
+                  <!-- <a href="">{{ one.categoryName }}</a> -->
 
-              <!-- 声明式路由导航-一级导航栏 -->
-              <!-- <router-link
+                  <!-- 声明式路由导航-一级导航栏 -->
+                  <!-- <router-link
                 :to="{
                   name: 'search',
                   query: {
@@ -39,8 +35,8 @@
                 >{{ one.categoryName }}</router-link
               > -->
 
-              <!-- 编程式路由导航-一级导航栏 -->
-              <a
+                  <!-- 编程式路由导航-一级导航栏 -->
+                  <!-- <a
                 href="javascript:;"
                 @click="
                   toSearch({
@@ -52,20 +48,28 @@
                   })
                 "
                 >{{ one.categoryName }}</a
-              >
-            </h3>
-            <div class="item-list clearfix">
-              <div class="subitem">
-                <dl
-                  class="fore"
-                  v-for="two of one.categoryChild"
-                  :key="two.categoryId"
-                >
-                  <dt>
-                    <!-- <a href="">{{ two.categoryName }}</a> -->
+              > -->
 
-                    <!-- 声明式路由导航-二级导航栏-->
-                    <!-- <router-link
+                  <!-- 事件委托导航-一级导航栏 -->
+                  <a
+                    href="javascript:;"
+                    :data-categoryName="one.categoryName"
+                    :data-category1Id="one.categoryId"
+                    >{{ one.categoryName }}</a
+                  >
+                </h3>
+                <div class="item-list clearfix">
+                  <div class="subitem">
+                    <dl
+                      class="fore"
+                      v-for="two of one.categoryChild"
+                      :key="two.categoryId"
+                    >
+                      <dt>
+                        <!-- <a href="">{{ two.categoryName }}</a> -->
+
+                        <!-- 声明式路由导航-二级导航栏-->
+                        <!-- <router-link
                       :to="{
                         name: 'search',
                         query: {
@@ -76,8 +80,8 @@
                       >{{ two.categoryName }}</router-link
                     > -->
 
-                    <!-- 编程式路由导航-二级导航栏 -->
-                    <a
+                        <!-- 编程式路由导航-二级导航栏 -->
+                        <!-- <a
                       href="javascript:;"
                       @click="
                         toSearch({
@@ -89,17 +93,25 @@
                         })
                       "
                       >{{ two.categoryName }}</a
-                    >
-                  </dt>
-                  <dd>
-                    <em
-                      v-for="three of two.categoryChild"
-                      :key="three.categoryId"
-                    >
-                      <!-- <a href="">{{ three.categoryName }}</a> -->
+                    > -->
 
-                      <!-- 声明式路由导航-三级导航栏 -->
-                      <!-- <router-link
+                        <!-- 事件委托导航-二级导航栏 -->
+                        <a
+                          href="javascript:;"
+                          :data-categoryName="two.categoryName"
+                          :data-category2Id="two.categoryId"
+                          >{{ two.categoryName }}</a
+                        >
+                      </dt>
+                      <dd>
+                        <em
+                          v-for="three of two.categoryChild"
+                          :key="three.categoryId"
+                        >
+                          <!-- <a href="">{{ three.categoryName }}</a> -->
+
+                          <!-- 声明式路由导航-三级导航栏 -->
+                          <!-- <router-link
                         :to="{
                           name: 'search',
                           query: {
@@ -110,8 +122,8 @@
                         >{{ three.categoryName }}</router-link
                       > -->
 
-                      <!-- 编程式路由导航-三级导航栏 -->
-                      <a
+                          <!-- 编程式路由导航-三级导航栏 -->
+                          <!-- <a
                         href="javascript:;"
                         @click="
                           toSearch({
@@ -123,15 +135,35 @@
                           })
                         "
                         >{{ three.categoryName }}</a
-                      >
-                    </em>
-                  </dd>
-                </dl>
+                      > -->
+
+                          <!-- 事件委托导航-三级导航栏 -->
+                          <a
+                            href="javascript:;"
+                            :data-categoryName="three.categoryName"
+                            :data-category3Id="three.categoryId"
+                            >{{ three.categoryName }}</a
+                          >
+                        </em>
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </transition>
       </div>
+      <nav class="nav">
+        <a href="###">服装城</a>
+        <a href="###">美妆馆</a>
+        <a href="###">尚品汇超市</a>
+        <a href="###">全球购</a>
+        <a href="###">闪购</a>
+        <a href="###">团购</a>
+        <a href="###">有趣</a>
+        <a href="###">秒杀</a>
+      </nav>
     </div>
   </div>
 </template>
@@ -144,14 +176,21 @@ export default {
   data() {
     return {
       enterIndex: -1,
+      isShow: true,
     };
   },
+  watch: {
+    $route() {
+      this.isShow = false;
+    },
+  },
   mounted() {
-    this.getBaseCategoryList();
+    //判断当前路径是否为search，如果是则隐藏导航栏
+    if (this.$route.path != "/home") {
+      this.isShow = false;
+    }
   },
   methods: {
-    //调用actions的getBaseCategoryList方法
-    ...mapActions(["getBaseCategoryList"]),
     enterIndexFn: _.throttle(
       function (index) {
         this.enterIndex = index;
@@ -159,8 +198,34 @@ export default {
       30,
       { trailing: true }
     ),
-    toSearch(location) {
-      this.$router.push(location);
+    //编程式路由导航跳转
+    // toSearch(location) {
+    //   this.$router.push(location);
+    // },
+    toSearch(e) {
+      const { target } = e;
+      const { categoryname, category1id, category2id, category3id } =
+        target.dataset;
+
+      const location = {
+        name: "search",
+        query: {
+          categoryName: categoryname,
+        },
+        params: this.$route.params,
+      };
+
+      if (category1id) {
+        location.query.category1Id = category1id;
+      } else if (category2id) {
+        location.query.category2Id = category2id;
+      } else {
+        location.query.category3Id = category3id;
+      }
+
+      if (categoryname) {
+        this.$router.push(location);
+      }
     },
   },
   computed: {
@@ -177,6 +242,23 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@keyframes sort {
+  form {
+    opacity: 1;
+    height: 461px;
+  }
+  to {
+    opacity: 0;
+    height: 0;
+  }
+}
+
+.sort-enter-active {
+  animation: sort 0.3s linear reverse;
+}
+.sort-leave-active {
+  animation: sort 0.3s linear;
+}
 .type-nav {
   border-bottom: 2px solid #e1251b;
 

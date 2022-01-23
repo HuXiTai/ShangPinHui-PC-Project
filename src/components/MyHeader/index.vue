@@ -38,6 +38,7 @@
             type="text"
             id="autocomplete"
             class="input-error input-xxlarge"
+            v-model="searchKey"
           />
           <!-- 一级编程式路由导航区 -->
           <button
@@ -56,6 +57,11 @@
 <script>
 export default {
   name: "MyHeader",
+  data() {
+    return {
+      searchKey: "",
+    };
+  },
   methods: {
     toSearch() {
       /*
@@ -66,7 +72,13 @@ export default {
           二：push("路径").catch(() => {})
           三：重写push和replace-->/router/index.js-10
       */
-      this.$router.push("/search");
+      this.$router.push({
+        name: "search",
+        params: {
+          searchKey: this.searchKey,
+        },
+        query: this.$route.query,
+      });
     },
   },
 };

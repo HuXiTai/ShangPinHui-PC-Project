@@ -50,7 +50,7 @@ export default new VueRouter({
     },
     {
       name: "search",
-      path: "/search",
+      path: "/search/:searchKey?",
       component: MySearch,
     },
     {

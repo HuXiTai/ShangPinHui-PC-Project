@@ -16,11 +16,20 @@
 <script>
 import MyHeader from "@/components/MyHeader";
 import MyFooter from "@/components/MyFooter";
+import { mapActions } from "vuex";
 export default {
   name: "App",
   components: {
     MyHeader,
     MyFooter,
+  },
+  mounted() {
+    //导航栏数据只用加载一次，所以放在App里发送ajax请求就行
+    this.getBaseCategoryList();
+  },
+  methods: {
+    //调用actions的getBaseCategoryList方法
+    ...mapActions(["getBaseCategoryList"]),
   },
 };
 </script>
