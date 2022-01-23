@@ -32,20 +32,24 @@ Vue.use(VueRouter);
 export default new VueRouter({
   routes: [
     {
+      name: "home",
       path: "/home",
       component: MyHome,
     },
     {
+      name: "login",
       path: "/login",
       component: MyLogin,
       meta: { noShowFooter: true }, //meta为路由时携带的一些固定消息，$route.meta.XXX获取
     },
     {
+      name: "register",
       path: "/register",
       component: MyRegister,
       meta: { noShowFooter: true },
     },
     {
+      name: "search",
       path: "/search",
       component: MySearch,
     },

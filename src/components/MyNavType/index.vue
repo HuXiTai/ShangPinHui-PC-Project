@@ -15,13 +15,44 @@
       </nav>
       <div class="sort">
         <div class="all-sort-list2">
+          <!-- 不使用hover实现移入移出效果 -->
           <div
             class="item"
-            v-for="one of baseCategoryList"
+            v-for="(one, index) of baseCategoryList"
             :key="one.categoryId"
+            :class="{ item_on: enterIndex === index }"
+            @mouseenter="enterIndexFn(index)"
+            @mouseleave="enterIndex = -1"
           >
             <h3>
-              <a href="">{{ one.categoryName }}</a>
+              <!-- <a href="">{{ one.categoryName }}</a> -->
+
+              <!-- 声明式路由导航-一级导航栏 -->
+              <!-- <router-link
+                :to="{
+                  name: 'search',
+                  query: {
+                    categoryName: one.categoryName,
+                    category1Id: one.categoryId,
+                  },
+                }"
+                >{{ one.categoryName }}</router-link
+              > -->
+
+              <!-- 编程式路由导航-一级导航栏 -->
+              <a
+                href="javascript:;"
+                @click="
+                  toSearch({
+                    name: 'search',
+                    query: {
+                      categoryName: one.categoryName,
+                      category1Id: one.categoryId,
+                    },
+                  })
+                "
+                >{{ one.categoryName }}</a
+              >
             </h3>
             <div class="item-list clearfix">
               <div class="subitem">
@@ -31,14 +62,68 @@
                   :key="two.categoryId"
                 >
                   <dt>
-                    <a href="">{{ two.categoryName }}</a>
+                    <!-- <a href="">{{ two.categoryName }}</a> -->
+
+                    <!-- 声明式路由导航-二级导航栏-->
+                    <!-- <router-link
+                      :to="{
+                        name: 'search',
+                        query: {
+                          categoryName: two.categoryName,
+                          category2Id: two.categoryId,
+                        },
+                      }"
+                      >{{ two.categoryName }}</router-link
+                    > -->
+
+                    <!-- 编程式路由导航-二级导航栏 -->
+                    <a
+                      href="javascript:;"
+                      @click="
+                        toSearch({
+                          name: 'search',
+                          query: {
+                            categoryName: two.categoryName,
+                            category2Id: two.categoryId,
+                          },
+                        })
+                      "
+                      >{{ two.categoryName }}</a
+                    >
                   </dt>
                   <dd>
                     <em
                       v-for="three of two.categoryChild"
                       :key="three.categoryId"
                     >
-                      <a href="">{{ three.categoryName }}</a>
+                      <!-- <a href="">{{ three.categoryName }}</a> -->
+
+                      <!-- 声明式路由导航-三级导航栏 -->
+                      <!-- <router-link
+                        :to="{
+                          name: 'search',
+                          query: {
+                            categoryName: three.categoryName,
+                            category3Id: three.categoryId,
+                          },
+                        }"
+                        >{{ three.categoryName }}</router-link
+                      > -->
+
+                      <!-- 编程式路由导航-三级导航栏 -->
+                      <a
+                        href="javascript:;"
+                        @click="
+                          toSearch({
+                            name: 'search',
+                            query: {
+                              categoryName: three.categoryName,
+                              category3Id: three.categoryId,
+                            },
+                          })
+                        "
+                        >{{ three.categoryName }}</a
+                      >
                     </em>
                   </dd>
                 </dl>
@@ -52,15 +137,31 @@
 </template>
 
 <script>
+import _ from "lodash";
 import { mapActions, mapState } from "vuex";
 export default {
   name: "MyNavType",
+  data() {
+    return {
+      enterIndex: -1,
+    };
+  },
   mounted() {
     this.getBaseCategoryList();
   },
   methods: {
     //调用actions的getBaseCategoryList方法
     ...mapActions(["getBaseCategoryList"]),
+    enterIndexFn: _.throttle(
+      function (index) {
+        this.enterIndex = index;
+      },
+      30,
+      { trailing: true }
+    ),
+    toSearch(location) {
+      this.$router.push(location);
+    },
   },
   computed: {
     //用计算属性baseCategoryList拿到基本类别列表
@@ -185,7 +286,8 @@ export default {
             }
           }
 
-          &:hover {
+          &.item_on {
+            background-color: #ddd;
             .item-list {
               display: block;
             }
