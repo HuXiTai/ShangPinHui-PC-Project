@@ -233,7 +233,7 @@ export default {
     ...mapState({
       baseCategoryList: (state) => {
         const { baseCategoryList } = state.home;
-        baseCategoryList.length = 16;
+        // baseCategoryList.length = 16;
         return baseCategoryList;
       },
     }),

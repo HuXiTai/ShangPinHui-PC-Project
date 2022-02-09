@@ -14,3 +14,8 @@ export const getBanner = () => {
 export const getFloor = () => {
   return mockAxios.get("/floor");
 };
+
+//searchList的请求
+export const getSearchList = (searchListParams) => {
+  return myAxios.post("/list", searchListParams);
+};
