@@ -3,12 +3,14 @@ import App from "./App.vue";
 import router from "@/router";
 import MyNavType from "@/components/MyNavType";
 import MySwiper from "@/components/MySwiper";
+import MyPagination from "@/components/MyPagination";
 import store from "@/store";
 import "@/mock/serverMock";
 
 //全局注册MyNavType组件，因为有多个组件会用到它
 Vue.component("MyNavType", MyNavType);
 Vue.component("MySwiper", MySwiper);
+Vue.component("MyPagination", MyPagination);
 
 Vue.config.productionTip = false;
 

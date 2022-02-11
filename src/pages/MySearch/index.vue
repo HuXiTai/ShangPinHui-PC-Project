@@ -47,23 +47,41 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li
+                  :class="{
+                    active: searchListParams.order.split(':')[0] === '1',
+                  }"
+                >
+                  <a href="#" @click.prevent="changeOrder('1')"
+                    >综合<i
+                      v-show="searchListParams.order.split(':')[0] === '1'"
+                      class="iconfont"
+                      :class="{
+                        'icon-xiajiantou':
+                          searchListParams.order.split(':')[1] === 'desc',
+                        'icon-shangjiantou':
+                          searchListParams.order.split(':')[1] === 'asc',
+                      }"
+                    ></i
+                  ></a>
                 </li>
-                <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li
+                  :class="{
+                    active: searchListParams.order.split(':')[0] === '2',
+                  }"
+                >
+                  <a href="#" @click.prevent="changeOrder('2')"
+                    >价格<i
+                      v-show="searchListParams.order.split(':')[0] === '2'"
+                      class="iconfont"
+                      :class="{
+                        'icon-xiajiantou':
+                          searchListParams.order.split(':')[1] === 'desc',
+                        'icon-shangjiantou':
+                          searchListParams.order.split(':')[1] === 'asc',
+                      }"
+                    ></i
+                  ></a>
                 </li>
               </ul>
             </div>
@@ -104,35 +122,14 @@
               </li>
             </ul>
           </div>
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
-          </div>
+          <!-- 给组件分别传入当前页、每次请求的数据、总页数、连续页数 -->
+          <MyPagination
+            :pageNo="searchListParams.pageNo"
+            :pageSize="searchListParams.pageSize"
+            :totalPages="totalPages"
+            :continueNum="5"
+            @changePageNo="changePageNo"
+          />
         </div>
       </div>
     </div>
@@ -156,13 +153,12 @@ export default {
         trademark: "",
         props: [],
 
-        order: "1:desc", //默认排序
+        order: "1:asc", //默认排序
         pageNo: 1, //默认请求的页码
-        pageSize: 10, //每次请求的数据
+        pageSize: 5, //每次请求的数据
       },
     };
   },
-
   components: {
     SearchSelector,
   },
@@ -203,7 +199,6 @@ export default {
       //再次发送ajax请求
       this.getSearchList(this.searchListParams);
     },
-
     //品牌搜索的自定义事件
     trademarkSearch(trademark) {
       //修改post配置参数trademark为id：品牌
@@ -226,9 +221,41 @@ export default {
       //再次发送ajax请求
       this.getSearchList(this.searchListParams);
     },
+    //点击实现排序方式和更换排序类型
+    changeOrder(orderType) {
+      //点击前上一个排序类型
+      const lastoderType = this.searchListParams.order.split(":")[0];
+      //点击前上一个排序方法
+      const lastoderOrder = this.searchListParams.order.split(":")[1];
+
+      //判断当前用户点击的是不是默认的逻辑点，如果是，则只需要改变图标方向即可
+      if (orderType === lastoderType) {
+        if (lastoderOrder === "desc") {
+          this.searchListParams.order = `${orderType}:asc`;
+        } else {
+          this.searchListParams.order = `${orderType}:desc`;
+        }
+      } else {
+        //如果用户点击的不是默认逻辑点，则要把逻辑点改变成当前的 并且默认降序
+        this.searchListParams.order = `${orderType}:desc`;
+      }
+
+      //再次发送ajax请求
+      this.getSearchList(this.searchListParams);
+    },
+    //当当前页码改变时调用事件
+    changePageNo(page) {
+      this.searchListParams.pageNo = page;
+      //再次发送ajax请求
+      this.getSearchList(this.searchListParams);
+    },
   },
   computed: {
     ...mapGetters(["goodsList"]),
+    //从数据中获取总页数
+    totalPages() {
+      return this.$store.state.search.searchListData.totalPages;
+    },
   },
   watch: {
     $route: {
@@ -351,6 +378,11 @@ export default {
           box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
 
           .sui-nav {
+            i {
+              position: relative;
+              top: 2px;
+              padding-left: 5px;
+            }
             position: relative;
             left: 0;
             display: block;
