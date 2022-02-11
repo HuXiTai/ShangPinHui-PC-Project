@@ -72,14 +72,31 @@ export default {
           二：push("路径").catch(() => {})
           三：重写push和replace-->/router/index.js-10
       */
+
+      //在search里的路由跳转不需要历史纪录
+      if (this.$route.path !== "/home") {
+        return this.$router.replace({
+          name: "search",
+          params: {
+            searchKey: this.searchKey || undefined,
+          },
+          query: this.$route.query,
+        });
+      }
+
       this.$router.push({
         name: "search",
         params: {
-          searchKey: this.searchKey,
+          searchKey: this.searchKey || undefined,
         },
         query: this.$route.query,
       });
     },
+  },
+  mounted() {
+    this.$bus.$on("clearSearchKey", () => {
+      this.searchKey = "";
+    });
   },
 };
 </script>

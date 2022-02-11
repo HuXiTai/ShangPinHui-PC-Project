@@ -224,6 +224,10 @@ export default {
       }
 
       if (categoryname) {
+        //在search里的路由跳转不需要历史纪录
+        if (this.$route.path !== "/home") {
+          return this.$router.replace(location);
+        }
         this.$router.push(location);
       }
     },

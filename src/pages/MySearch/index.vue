@@ -11,18 +11,36 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
+            <!-- 三级分类标识 -->
             <li class="with-x" v-show="searchListParams.keyword">
               {{ searchListParams.keyword }}<i @click="deleteKeyword">×</i>
             </li>
+            <!-- 搜索标识 -->
             <li class="with-x" v-show="searchListParams.categoryName">
               {{ searchListParams.categoryName
               }}<i @click="deleteCategoryName">×</i>
+            </li>
+            <!-- 品牌搜索标识 -->
+            <li class="with-x" v-show="searchListParams.trademark">
+              品牌{{ searchListParams.trademark.split(":")[1]
+              }}<i @click="deleteTrademark">×</i>
+            </li>
+            <!-- 属性搜索标识 -->
+            <li
+              class="with-x"
+              v-for="(prop, index) of searchListParams.props"
+              :key="index"
+            >
+              {{ prop.split(":")[1] }}<i @click="deleteAttr(index)">×</i>
             </li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector />
+        <SearchSelector
+          @trademarkSearch="trademarkSearch"
+          @attrSearch="attrSearch"
+        />
 
         <!--details-->
         <div class="details clearfix">
@@ -66,7 +84,7 @@
                     </strong>
                   </div>
                   <div class="attr">
-                    <a target="_blank" href="item.html">{{ item.title }}</a>
+                    <a target="_blank" href="item.html" v-html="item.title"></a>
                   </div>
                   <div class="commit">
                     <i class="command">已有<span>2000</span>人评价</i>
@@ -150,6 +168,7 @@ export default {
   },
   methods: {
     ...mapActions(["getSearchList"]),
+    //删除搜索标识三级分类标识
     deleteKeyword() {
       //当点击x时，让其依赖数据为空，就会隐藏
       this.searchListParams.keyword = "";
@@ -158,7 +177,11 @@ export default {
         name: "search",
         query: this.$route.query,
       });
+
+      //调用header里事件总线定义的事件，清除搜索框
+      this.$bus.$emit("clearSearchKey");
     },
+    //删除三级分类标识
     deleteCategoryName() {
       //当点击x时，让其依赖数据为空，就会隐藏
       this.searchListParams.categoryName = "";
@@ -167,6 +190,41 @@ export default {
         name: "search",
         params: this.$route.params,
       });
+    },
+    //删除品牌搜索标识
+    deleteTrademark() {
+      this.searchListParams.trademark = "";
+      this.getSearchList(this.searchListParams);
+    },
+    //删除属性搜索标识
+    deleteAttr(index) {
+      //index是当前点击删除的属性标识的下标 和 props数组中的值一一对应的
+      this.searchListParams.props.splice(index, 1);
+      //再次发送ajax请求
+      this.getSearchList(this.searchListParams);
+    },
+
+    //品牌搜索的自定义事件
+    trademarkSearch(trademark) {
+      //修改post配置参数trademark为id：品牌
+      this.searchListParams.trademark = trademark;
+      //再次发送ajax请求
+      this.getSearchList(this.searchListParams);
+    },
+    //属性搜索的自定义事件
+    attrSearch(attrParams) {
+      //如果数据重复点击则return
+      const attrId = attrParams.split(":")[0];
+      if (
+        this.searchListParams.props.some((item) => item.split(":")[0] == attrId)
+      )
+        return;
+
+      //修改post配置参数props为属性ID:属性值:属性名
+      this.searchListParams.props.push(attrParams);
+
+      //再次发送ajax请求
+      this.getSearchList(this.searchListParams);
     },
   },
   computed: {

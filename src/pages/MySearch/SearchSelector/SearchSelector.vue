@@ -3,8 +3,12 @@
     <div class="type-wrap logo">
       <div class="fl key brand">品牌</div>
       <div class="value logos">
-        <ul class="logo-list">
-          <li v-for="item of trademarkList" :key="item.tmId">
+        <ul class="logo-list" @click="trademarkSearch">
+          <li
+            v-for="item of trademarkList"
+            :key="item.tmId"
+            :data-tmId="item.tmId"
+          >
             {{ item.tmName }}
           </li>
         </ul>
@@ -17,7 +21,7 @@
     <div class="type-wrap" v-for="attr of attrsList" :key="attr.attrId">
       <div class="fl key">{{ attr.attrName }}</div>
       <div class="fl value">
-        <ul class="type-list">
+        <ul class="type-list" @click="attrSertch(attr, $event)">
           <li v-for="(item, index) of attr.attrValueList" :key="index">
             <a>{{ item }}</a>
           </li>
@@ -34,6 +38,29 @@ export default {
   name: "MySearchSelector",
   computed: {
     ...mapGetters(["attrsList", "trademarkList"]),
+  },
+  methods: {
+    //用事件委托的方式触发品牌搜索事件
+    trademarkSearch(e) {
+      //拿到需要的数据
+      const tmId = e.target.dataset.tmid;
+      const tmName = e.target.innerHTML;
+      //拼接数据
+      const trademarParams = `${tmId}:${tmName}`;
+      //触发父组件的自定义事件
+      this.$emit("trademarkSearch", trademarParams);
+    },
+    //用事件委托的方式触发属性搜索事件
+    attrSertch(attr, $event) {
+      //拿到需要的数据
+      const attrId = attr.attrId;
+      const attrName = attr.attrName;
+      const attrValue = $event.target.innerHTML;
+      //拼接数据
+      const attrParams = `${attrId}:${attrValue}:${attrName}`;
+      //触发父组件的自定义事件
+      this.$emit("attrSearch", attrParams);
+    },
   },
 };
 </script>
@@ -93,6 +120,7 @@ export default {
           color: #e1251b;
           font-style: italic;
           font-size: 14px;
+          cursor: pointer;
 
           img {
             max-width: 100%;
@@ -107,6 +135,7 @@ export default {
           display: block;
           margin-right: 30px;
           line-height: 26px;
+          cursor: pointer;
 
           a {
             text-decoration: none;
