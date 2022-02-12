@@ -22,7 +22,7 @@
     <button v-show="startEnd.end < totalPages - 1">···</button>
     <button
       v-show="startEnd.end < totalPages"
-      @click="$emit('changePageNo', this.totalPages)"
+      @click="$emit('changePageNo', totalPages)"
     >
       {{ totalPages }}
     </button>
@@ -89,6 +89,9 @@ export default {
 
 <style lang="less" scoped>
 .pagination {
+  text-align: center;
+  margin-top: 100px;
+
   button {
     margin: 0 5px;
     background-color: #f4f4f5;
@@ -116,6 +119,10 @@ export default {
       cursor: not-allowed;
       background-color: #409eff;
       color: #fff;
+      width: 50px;
+      height: 50px;
+      position: relative;
+      top: -11px;
     }
   }
 }

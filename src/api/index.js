@@ -19,3 +19,8 @@ export const getFloor = () => {
 export const getSearchList = (searchListParams) => {
   return myAxios.post("/list", searchListParams);
 };
+
+//detail页面的数据请求
+export const getDetailData = (skuId) => {
+  return myAxios.get("/item/" + skuId);
+};

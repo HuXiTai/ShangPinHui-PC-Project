@@ -91,7 +91,7 @@
               <li class="yui3-u-1-5" v-for="item of goodsList" :key="item.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank"
+                    <a href="javascript:;" @click="toDetail(item.id)"
                       ><img :src="item.defaultImg"
                     /></a>
                   </div>
@@ -102,7 +102,11 @@
                     </strong>
                   </div>
                   <div class="attr">
-                    <a target="_blank" href="item.html" v-html="item.title"></a>
+                    <a
+                      href="javascript:;"
+                      v-html="item.title"
+                      @click="toDetail(item.id)"
+                    ></a>
                   </div>
                   <div class="commit">
                     <i class="command">已有<span>2000</span>人评价</i>
@@ -248,6 +252,15 @@ export default {
       this.searchListParams.pageNo = page;
       //再次发送ajax请求
       this.getSearchList(this.searchListParams);
+    },
+    //编程式路由导航跳转到详情页面
+    toDetail(skuId) {
+      this.$router.push({
+        name: "detail",
+        params: {
+          skuId,
+        },
+      });
     },
   },
   computed: {
