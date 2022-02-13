@@ -1,11 +1,11 @@
 <template>
   <div class="spec-preview">
-    <img :src="skuInfo.skuImageList[zoomIndex].imgUrl" />
-    <div class="event"></div>
+    <img :src="imgList[zoomIndex].imgUrl" />
+    <div class="event" @mousemove="maskMove"></div>
     <div class="big">
-      <img :src="skuInfo.skuDefaultImg" />
+      <img :src="imgList[zoomIndex].imgUrl" ref="bigImg" />
     </div>
-    <div class="mask"></div>
+    <div class="mask" ref="mask"></div>
   </div>
 </template>
 
@@ -23,6 +23,43 @@ export default {
     this.$bus.$on("changeZoomChecked", (index) => {
       this.zoomIndex = index;
     });
+  },
+  computed: {
+    imgList() {
+      return this.skuInfo.skuImageList || [{}];
+    },
+  },
+  methods: {
+    //蒙版绑定移动事件
+    maskMove(e) {
+      const oMask = this.$refs.mask;
+      const oBigImg = this.$refs.bigImg;
+
+      //模板位置的计算与赋值
+      const maskLocation = {
+        left: e.offsetX - oMask.offsetWidth / 2,
+        top: e.offsetY - oMask.offsetHeight / 2,
+      };
+
+      //模板临界值的判断
+      if (maskLocation.left <= 0) {
+        maskLocation.left = 0;
+      } else if (maskLocation.left >= oMask.offsetWidth) {
+        maskLocation.left = oMask.offsetWidth;
+      }
+      if (maskLocation.top <= 0) {
+        maskLocation.left = 0;
+      } else if (maskLocation.top >= oMask.offsetHeight) {
+        maskLocation.top = oMask.offsetHeight;
+      }
+
+      //已知放大镜的比例是2
+      oBigImg.style.left = -2 * maskLocation.left + "px";
+      oBigImg.style.top = -2 * maskLocation.top + "px";
+
+      oMask.style.left = maskLocation.left + "px";
+      oMask.style.top = maskLocation.top + "px";
+    },
   },
 };
 </script>

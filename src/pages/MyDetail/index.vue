@@ -89,12 +89,22 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" />
-                <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <input
+                  autocomplete="off"
+                  class="itxt"
+                  v-model="goodsNum"
+                  @change="goodsNum = goodsNum > 1 ? +goodsNum : 1"
+                />
+                <a href="javascript:" class="plus" @click="goodsNum += 1">+</a>
+                <a
+                  href="javascript:"
+                  class="mins"
+                  @click="goodsNum -= goodsNum <= 1 ? 0 : 1"
+                  >-</a
+                >
               </div>
               <div class="add">
-                <a href="javascript:">加入购物车</a>
+                <a href="javascript:" @click="addCart">加入购物车</a>
               </div>
             </div>
           </div>
@@ -339,6 +349,11 @@ import Zoom from "./Zoom/Zoom";
 
 export default {
   name: "Detail",
+  data() {
+    return {
+      goodsNum: 1,
+    };
+  },
   components: {
     ImageList,
     Zoom,
@@ -350,7 +365,7 @@ export default {
     console.log(this.detailData, "***");
   },
   methods: {
-    ...mapActions(["getDetailData"]),
+    ...mapActions(["getDetailData", "getAddToCart"]),
 
     //点击颜色或版本时让选择框变动
     changeChecked(all, now) {
@@ -362,6 +377,19 @@ export default {
       });
       //让选中的选择框选中
       all[now].isChecked = "1";
+    },
+
+    //点击加入购物车发送ajax请求
+    async addCart() {
+      try {
+        const re = await this.getAddToCart({
+          skuId: this.skuId,
+          skuNum: this.skuNum,
+        });
+        alert("加入购物车成功");
+      } catch (e) {
+        alert("加入购物车失败");
+      }
     },
   },
   computed: {

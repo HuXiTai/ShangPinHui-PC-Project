@@ -1,5 +1,5 @@
 <template>
-  <div class="swiper-container">
+  <div class="swiper-container" ref="imageListSwiper">
     <div class="swiper-wrapper">
       <div
         class="swiper-slide"
@@ -34,6 +34,32 @@ export default {
 
       //触发自定义事件，当小图发生改变时提醒大图
       this.$bus.$emit("changeZoomChecked", index);
+    },
+  },
+  watch: {
+    skuInfo: {
+      immediate: true,
+      handler() {
+        this.$nextTick(() => {
+          //为防止多个轮播图有多个配置，class需改成ref
+          new Swiper(this.$refs.imageListSwiper, {
+            // loop: true, // 循环模式选项
+            slidesPerView: 3, //设置slider容器能够同时显示的slides数量(carousel模式)。
+            slidesPerGroup: 3, // this.$bus.$emit("changeZoomChecked", index); //在carousel mode下定义slides的数量多少为一组。
+
+            // 如果需要分页器
+            pagination: {
+              el: ".swiper-pagination",
+            },
+
+            // 如果需要前进后退按钮
+            navigation: {
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
+            },
+          });
+        });
+      },
     },
   },
 };

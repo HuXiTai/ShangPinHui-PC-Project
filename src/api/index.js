@@ -24,3 +24,8 @@ export const getSearchList = (searchListParams) => {
 export const getDetailData = (skuId) => {
   return myAxios.get("/item/" + skuId);
 };
+
+//加入购物车的数据请求
+export const addCart = (skuId, skuNum) => {
+  return myAxios.get("/cart/addToCart/" + skuId + "/" + skuNum);
+};
