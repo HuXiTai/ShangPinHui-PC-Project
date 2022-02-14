@@ -1,6 +1,7 @@
 import axios from "axios";
 import "nprogress/nprogress.css";
 import Nprogress from "nprogress";
+import store from "@/store";
 
 //创建axios新实例
 const myAxios = axios.create({
@@ -12,6 +13,8 @@ const myAxios = axios.create({
 myAxios.interceptors.request.use(
   (config) => {
     Nprogress.start(); //请求时进度条开始
+    let userTempId = store.state.user.userTempId; //的到因为临时唯一标识
+    config.headers.userTempId = userTempId; //把用户临时唯一标识配置在请求头中
     return config;
   },
   (err) => {

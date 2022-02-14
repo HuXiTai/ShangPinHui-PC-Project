@@ -48,7 +48,7 @@ export default {
         maskLocation.left = oMask.offsetWidth;
       }
       if (maskLocation.top <= 0) {
-        maskLocation.left = 0;
+        maskLocation.top = 0;
       } else if (maskLocation.top >= oMask.offsetHeight) {
         maskLocation.top = oMask.offsetHeight;
       }

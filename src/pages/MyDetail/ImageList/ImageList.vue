@@ -44,8 +44,8 @@ export default {
           //为防止多个轮播图有多个配置，class需改成ref
           new Swiper(this.$refs.imageListSwiper, {
             // loop: true, // 循环模式选项
-            slidesPerView: 3, //设置slider容器能够同时显示的slides数量(carousel模式)。
-            slidesPerGroup: 3, // this.$bus.$emit("changeZoomChecked", index); //在carousel mode下定义slides的数量多少为一组。
+            slidesPerView: 6, //设置slider容器能够同时显示的slides数量(carousel模式)。
+            slidesPerGroup: 2, // this.$bus.$emit("changeZoomChecked", index); //在carousel mode下定义slides的数量多少为一组。
 
             // 如果需要分页器
             pagination: {

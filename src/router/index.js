@@ -7,6 +7,8 @@ import MyLogin from "@/pages/MyLogin";
 import MyRegister from "@/pages/MyRegister";
 import MySearch from "@/pages/MySearch";
 import MyDetail from "@/pages/MyDetail";
+import MyAddCartSuccess from "@/pages/MyAddCartSuccess";
+import MyShopCart from "@/pages/MyShopCart";
 
 //重写push和repalce
 const lastPush = VueRouter.prototype.push;
@@ -69,6 +71,18 @@ export default new VueRouter({
       name: "detail",
       path: "/detail/:skuId",
       component: MyDetail,
+    },
+    //添加到购物车成功_静态
+    {
+      name: "success",
+      path: "/success/:skuNum?",
+      component: MyAddCartSuccess,
+    },
+    //购物车页面
+    {
+      name: "shopCart",
+      path: "/cart/cartList",
+      component: MyShopCart,
     },
     {
       //路由重定向

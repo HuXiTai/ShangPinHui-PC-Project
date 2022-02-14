@@ -27,5 +27,10 @@ export const getDetailData = (skuId) => {
 
 //加入购物车的数据请求
 export const addCart = (skuId, skuNum) => {
-  return myAxios.get("/cart/addToCart/" + skuId + "/" + skuNum);
+  return myAxios.post("/cart/addToCart/" + skuId + "/" + skuNum);
+};
+
+//购物车数据的请求
+export const getShopCart = () => {
+  return myAxios.get("/cart/cartList");
 };

@@ -1,10 +1,6 @@
-import getUserTempId from "@/utils/UserTempId";
-
 const actions = {};
 const mutations = {};
-const state = {
-  userTempId: getUserTempId(),
-};
+const state = {};
 const getters = {};
 
 export default {

@@ -93,7 +93,9 @@
                   autocomplete="off"
                   class="itxt"
                   v-model="goodsNum"
-                  @change="goodsNum = goodsNum > 1 ? +goodsNum : 1"
+                  @change="
+                    goodsNum = parseInt(goodsNum) > 1 ? +parseInt(goodsNum) : 1
+                  "
                 />
                 <a href="javascript:" class="plus" @click="goodsNum += 1">+</a>
                 <a
@@ -361,11 +363,11 @@ export default {
 
   mounted() {
     //当组件挂载完成时请求detail数据
-    this.getDetailData(this.$route.params.skuId);
+    this.getDetailData(this.skuId);
     console.log(this.detailData, "***");
   },
   methods: {
-    ...mapActions(["getDetailData", "getAddToCart"]),
+    ...mapActions(["getDetailData", "getAddCart"]),
 
     //点击颜色或版本时让选择框变动
     changeChecked(all, now) {
@@ -382,11 +384,18 @@ export default {
     //点击加入购物车发送ajax请求
     async addCart() {
       try {
-        const re = await this.getAddToCart({
+        const re = await this.getAddCart({
           skuId: this.skuId,
-          skuNum: this.skuNum,
+          skuNum: this.goodsNum,
         });
         alert("加入购物车成功");
+        this.$router.push({
+          name: "success",
+          params: {
+            skuNum: this.goodsNum,
+          },
+        });
+        sessionStorage.setItem("skuInfo_key", JSON.stringify(this.skuInfo));
       } catch (e) {
         alert("加入购物车失败");
       }
@@ -406,6 +415,9 @@ export default {
     },
     spuSaleAttrList() {
       return this.detailData.spuSaleAttrList || [];
+    },
+    skuId() {
+      return this.$route.params.skuId;
     },
   },
 };

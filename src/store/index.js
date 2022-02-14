@@ -4,16 +4,20 @@ import home from "@/modules/home";
 import user from "@/modules/user";
 import search from "@/modules/search";
 import detail from "@/modules/detail";
+import shopCart from "@/modules/shopCart";
 import { addCart } from "@/api";
 
 Vue.use(Vuex);
 
 const actions = {
-  getAddCart(miniStore, { skuId, skuNum }) {
-    const re = addCart(skuId, skuNum);
+  async getAddCart(miniStore, { skuId, skuNum }) {
+    const re = await addCart(skuId, skuNum);
     if (re.code === 200) {
+      console.log(123);
+
       return "ok";
     } else {
+      console.log(123);
       return Promise.reject(new Error("加入购物车失败"));
     }
   },
@@ -36,5 +40,6 @@ export default new Vuex.Store({
     user,
     search,
     detail,
+    shopCart,
   },
 });
