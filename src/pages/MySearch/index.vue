@@ -113,9 +113,9 @@
                   </div>
                   <div class="operate">
                     <a
-                      href="success-cart.html"
-                      target="_blank"
+                      href="javascript:;"
                       class="sui-btn btn-bordered btn-danger"
+                      @click="addCart(item.id)"
                       >加入购物车</a
                     >
                     <a href="javascript:void(0);" class="sui-btn btn-bordered"
@@ -167,7 +167,7 @@ export default {
     SearchSelector,
   },
   methods: {
-    ...mapActions(["getSearchList"]),
+    ...mapActions(["getSearchList", "getAddCart"]),
     //删除搜索标识三级分类标识
     deleteKeyword() {
       //当点击x时，让其依赖数据为空，就会隐藏
@@ -261,6 +261,16 @@ export default {
           skuId,
         },
       });
+    },
+    //搜索页面加入购物车请求
+    async addCart(id) {
+      try {
+        await this.getAddCart({ skuId: id, skuNum: 1 });
+      } catch (e) {
+        console.log(e);
+
+        alert("加入购物车失败");
+      }
     },
   },
   computed: {

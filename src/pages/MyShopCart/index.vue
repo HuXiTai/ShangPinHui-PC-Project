@@ -17,7 +17,12 @@
           :key="cartInfo.id"
         >
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list" />
+            <input
+              type="checkbox"
+              name="chk_list"
+              :checked="cartInfo.isChecked === 1"
+              @change="changeOneState(cartInfo)"
+            />
           </li>
           <li class="cart-list-con2">
             <img :src="cartInfo.imgUrl" />
@@ -32,21 +37,43 @@
             <span class="price">{{ cartInfo.cartPrice }}.00</span>
           </li>
           <li class="cart-list-con5">
-            <a href="javascript:void(0)" class="mins">-</a>
+            <a
+              href="javascript:void(0)"
+              class="mins"
+              @click="changeCartNum(cartInfo.skuId, -1, cartInfo.skuNum)"
+              >-</a
+            >
             <input
               autocomplete="off"
               type="text"
               :value="cartInfo.skuNum"
               minnum="1"
               class="itxt"
+              @change="
+                changeCartNum(
+                  cartInfo.skuId,
+                  $event.target.value - cartInfo.skuNum,
+                  cartInfo.skuNum
+                )
+              "
             />
-            <a href="javascript:void(0)" class="plus">+</a>
+            <a
+              href="javascript:void(0)"
+              class="plus"
+              @click="changeCartNum(cartInfo.skuId, 1, cartInfo.skuNum)"
+              >+</a
+            >
           </li>
           <li class="cart-list-con6">
             <span class="sum">{{ cartInfo.cartPrice * cartInfo.skuNum }}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet">删除</a>
+            <a
+              href="#none"
+              class="sindelet"
+              @click="deleteOneGoods(cartInfo.skuId)"
+              >删除</a
+            >
             <br />
             <a href="#none">移到收藏</a>
           </li>
@@ -55,19 +82,22 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox" />
+        <input class="chooseAll" type="checkbox" v-model="isAllChecked" />
         <span>全选</span>
       </div>
       <div class="option">
-        <a href="#none">删除选中的商品</a>
+        <a href="#none" @click="deleteAllGoods">删除选中的商品</a>
         <a href="#none">移到我的关注</a>
         <a href="#none">清除下柜商品</a>
       </div>
       <div class="money-box">
-        <div class="chosed">已选择 <span>0</span>件商品</div>
+        <div class="chosed">
+          已选择 <span>{{ allSkuNum }}</span
+          >件商品
+        </div>
         <div class="sumprice">
           <em>总价（不含运费） ：</em>
-          <i class="summoney">0</i>
+          <i class="summoney">{{ allPrice }}</i>
         </div>
         <div class="sumbtn">
           <a class="sum-btn" href="###" target="_blank">结算</a>
@@ -86,10 +116,118 @@ export default {
     console.log(this.cartInfoList);
   },
   methods: {
-    ...mapActions(["getShopCart"]),
+    ...mapActions([
+      "getShopCart",
+      "getAddCart",
+      "getCheckedOneState",
+      "getCheckedAllState",
+      "getDeleteOneGoods",
+      "getDeleteAllGoods",
+    ]),
+    //当点击按钮时
+    checkOen(e) {
+      console.log(e.target.checked);
+    },
+    //点击+、-时发送getAddCart的ajax
+    changeCartNum(skuId, skuNum, lastNum) {
+      if (skuNum + lastNum < 1) {
+        skuNum = 1 - lastNum;
+      }
+      //发送修改商品数量请求
+      this.getAddCart({ skuId, skuNum });
+      //重新请求购物车列表数据
+      setTimeout(() => {
+        this.getShopCart();
+      }, 100);
+    },
+    //点击单选框
+    async changeOneState(cartInfo) {
+      try {
+        //发送单选的ajax请求
+        await this.getCheckedOneState({
+          skuId: cartInfo.skuId,
+          isChecked: cartInfo.isChecked === 1 ? 0 : 1,
+        });
+
+        //重新请求购物车列表数据
+        setTimeout(() => {
+          this.getShopCart();
+        }, 100);
+      } catch {
+        alert("选择单个商品失败");
+      }
+    },
+
+    //删除单个商品
+    async deleteOneGoods(skuId) {
+      try {
+        await this.getDeleteOneGoods(skuId);
+        //重新请求购物车列表数据
+        setTimeout(() => {
+          this.getShopCart();
+        }, 100);
+      } catch {
+        alert("删除单个商品失败");
+      }
+    },
+
+    async deleteAllGoods() {
+      try {
+        await this.getDeleteAllGoods(
+          this.cartInfoList.reduce((p, c) => {
+            c.isChecked === 1 ? p.push(c.skuId) : p;
+            return p;
+          }, [])
+        );
+        //重新请求购物车列表数据
+        setTimeout(() => {
+          this.getShopCart();
+        }, 100);
+      } catch {
+        alert("删除全部商品失败");
+      }
+    },
   },
   computed: {
     ...mapGetters(["cartInfoList"]),
+    //监听单选按钮当全部被选中时全选按钮选中
+    isAllChecked: {
+      get() {
+        return (
+          this.cartInfoList.every((item) => {
+            return item.isChecked === 1;
+          }) && this.cartInfoList.length
+        );
+      },
+      set(value) {
+        //发送修改全部状态的请求
+        this.getCheckedAllState({
+          isChecked: value ? 1 : 0,
+          skuIdList: this.cartInfoList.reduce((p, c) => {
+            p.push(c.skuId);
+            return p;
+          }, []),
+        });
+        //重新请求购物车列表数据
+        setTimeout(() => {
+          this.getShopCart();
+        }, 100);
+      },
+    },
+
+    //监听选中了多少间商品
+    allSkuNum() {
+      return this.cartInfoList.reduce((p, c) => {
+        return c.isChecked === 1 ? p + c.skuNum : p;
+      }, 0);
+    },
+
+    //计算得到总价
+    allPrice() {
+      return this.cartInfoList.reduce((p, c) => {
+        return c.isChecked === 1 ? p + c.skuNum * c.cartPrice : p;
+      }, 0);
+    },
   },
 };
 </script>

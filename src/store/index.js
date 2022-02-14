@@ -10,14 +10,11 @@ import { addCart } from "@/api";
 Vue.use(Vuex);
 
 const actions = {
-  async getAddCart(miniStore, { skuId, skuNum }) {
+  async getAddCart(_, { skuId, skuNum }) {
     const re = await addCart(skuId, skuNum);
     if (re.code === 200) {
-      console.log(123);
-
       return "ok";
     } else {
-      console.log(123);
       return Promise.reject(new Error("加入购物车失败"));
     }
   },

@@ -34,3 +34,25 @@ export const addCart = (skuId, skuNum) => {
 export const getShopCart = () => {
   return myAxios.get("/cart/cartList");
 };
+
+//切换商品选中状态的请求
+export const checkedOneState = (skuId, isChecked) => {
+  return myAxios.get("/cart/checkCart" + "/" + skuId + "/" + isChecked);
+};
+
+//修改购物车全部修改状态
+export const checkedAllState = (isChecked, skuIdList) => {
+  return myAxios.post("/cart/batchCheckCart" + "/" + isChecked, skuIdList);
+};
+
+//删除购物车单个修改状态
+export const deleteOneGoods = (skuId) => {
+  return myAxios.delete("/cart/deleteCart" + "/" + skuId);
+};
+
+//删除购物车全部修改状态
+export const deleteAllGoods = (skuIdList) => {
+  return myAxios.delete("/cart/batchDeleteCart", {
+    data: skuIdList,
+  });
+};
