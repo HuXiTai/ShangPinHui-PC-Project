@@ -56,3 +56,28 @@ export const deleteAllGoods = (skuIdList) => {
     data: skuIdList,
   });
 };
+
+//获取注册验证码
+export const getCode = (phone) => {
+  return myAxios.get("/user/passport/sendCode/" + phone);
+};
+
+//立即注册
+export const userRegister = (userInfo) => {
+  return myAxios.post("/user/passport/register", userInfo);
+};
+
+//登录获取token
+export const getLoginToken = (loginInfo) => {
+  return myAxios.post("/user/passport/login", loginInfo);
+};
+
+//登录获取用户消息
+export const getUserInfo = () => {
+  return myAxios.get("/user/passport/auth/getUserInfo");
+};
+
+//退出登录
+export const getLogout = () => {
+  return myAxios.get("/user/passport/logout");
+};

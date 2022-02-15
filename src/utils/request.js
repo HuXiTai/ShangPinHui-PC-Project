@@ -15,6 +15,9 @@ myAxios.interceptors.request.use(
     Nprogress.start(); //请求时进度条开始
     let userTempId = store.state.user.userTempId; //的到因为临时唯一标识
     config.headers.userTempId = userTempId; //把用户临时唯一标识配置在请求头中
+
+    let token = store.state.user.token; //得到token;
+    config.headers.token = token; //把用户token配置在请求头中
     return config;
   },
   (err) => {

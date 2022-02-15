@@ -6,7 +6,13 @@
       <div class="container">
         <div class="loginList">
           <p>尚品汇欢迎您！</p>
-          <p>
+          <p v-if="$store.state.user.userInfo">
+            <span>用户:</span>
+            <!-- 一级声明式路由导航区 -->
+            <a to="/login">{{ $store.state.user.userInfo.name }}</a>
+            <a to="/register" class="register" @click="logout">退出登录</a>
+          </p>
+          <p v-else>
             <span>请</span>
             <!-- 一级声明式路由导航区 -->
             <router-link to="/login">登录</router-link>
@@ -55,6 +61,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   name: "MyHeader",
   data() {
@@ -63,9 +70,10 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["getLogout"]),
     toSearch() {
       /*
-        当重复点击时会报错：Uncaught (in promise) NavigationDuplicated: Avoided redundant navigation to current location 
+        当重复点击时会报错：Uncaught (in promise) NavigationDuplicated: Avoided redundant navigation to current location
         原因：因为.push返回的是promise实例则点击第二次时会调用reject当reject没有处理时会报错
         解决方法：
           一：push("路径","()=>{}","()=>{}") //第二/三个回调同resolve/reject
@@ -91,6 +99,17 @@ export default {
         },
         query: this.$route.query,
       });
+    },
+    //退出登录
+    async logout() {
+      try {
+        await this.getLogout();
+        alert("退出成功");
+        this.$store.commit("SET_CLEAR_TOKEN_USER_INFO");
+        this.$router.push("/");
+      } catch (e) {
+        alert(e.message);
+      }
     },
   },
   mounted() {
