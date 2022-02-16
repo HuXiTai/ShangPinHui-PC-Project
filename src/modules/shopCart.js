@@ -63,7 +63,15 @@ const state = {
 };
 const getters = {
   cartInfoList(state) {
-    return (state.ShopCartData[0] || {}).cartInfoList || [];
+    // return (state.ShopCartData[0] || {}).cartInfoList || [];
+    
+    //解决了登录或没登录时加入购物车会形成多个数组的bug
+    return state.ShopCartData.reduce((p, c) => {
+      if (c.cartInfoList) {
+        p.push(...c.cartInfoList);
+      }
+      return p;
+    }, []);
   },
 };
 

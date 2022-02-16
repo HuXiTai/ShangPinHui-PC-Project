@@ -81,3 +81,28 @@ export const getUserInfo = () => {
 export const getLogout = () => {
   return myAxios.get("/user/passport/logout");
 };
+
+//请求订单详情的数据
+export const getTradeInfo = () => {
+  return myAxios.get("/order/auth/trade");
+};
+
+//请求用户地址信息
+export const getAddressInfo = () => {
+  return mockAxios.get("/tradeaddress");
+};
+
+//提交订单请求
+export const getOrderId = (tradeNo, tardeInfo) => {
+  return myAxios.post(`/order/auth/submitOrder?tradeNo=${tradeNo}`, tardeInfo);
+};
+
+//获取订单详情
+export const getOrderDetile = (orderId) => {
+  return myAxios.get(`/payment/weixin/createNative/${orderId}`);
+};
+
+//查看是否已经支付
+export const getPayInfo = (orderId) => {
+  return myAxios.get(`/payment/weixin/queryPayStatus/${orderId}`);
+};

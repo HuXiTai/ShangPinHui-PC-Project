@@ -10,6 +10,9 @@ import MySearch from "@/pages/MySearch";
 import MyDetail from "@/pages/MyDetail";
 import MyAddCartSuccess from "@/pages/MyAddCartSuccess";
 import MyShopCart from "@/pages/MyShopCart";
+import MyPay from "@/pages/MyPay";
+import MyPaySuccess from "@/pages/MyPaySuccess";
+import MyTrade from "@/pages/MyTrade";
 
 //重写push和repalce
 const lastPush = VueRouter.prototype.push;
@@ -84,6 +87,24 @@ const router = new VueRouter({
       name: "shopCart",
       path: "/cart/cartList",
       component: MyShopCart,
+    },
+    //支付页面
+    {
+      name: "pay",
+      path: "/pay",
+      component: MyPay,
+    },
+    //支付完成页面
+    {
+      name: "paysuccess",
+      path: "/paysuccess",
+      component: MyPaySuccess,
+    },
+    //订单详情页面
+    {
+      name: "trade",
+      path: "/trade",
+      component: MyTrade,
     },
     {
       //路由重定向
