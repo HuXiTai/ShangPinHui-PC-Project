@@ -13,6 +13,9 @@ import MyShopCart from "@/pages/MyShopCart";
 import MyPay from "@/pages/MyPay";
 import MyPaySuccess from "@/pages/MyPaySuccess";
 import MyTrade from "@/pages/MyTrade";
+import MyCenter from "@/pages/MyCenter";
+import MyGroupOrder from "@/pages/MyCenter/MyGroupOrder";
+import MyMyOrder from "@/pages/MyCenter/MyMyOrder";
 
 //重写push和repalce
 const lastPush = VueRouter.prototype.push;
@@ -106,6 +109,24 @@ const router = new VueRouter({
       path: "/trade",
       component: MyTrade,
     },
+
+    //个人中心页面
+    {
+      path: "/center",
+      component: MyCenter,
+      children: [
+        {
+          name: "myorder",
+          path: "myorder",
+          component: MyMyOrder,
+        },
+        { name: "grouporder", path: "grouporder", component: MyGroupOrder },
+        {
+          path: "",
+          redirect: "/center/myorder",
+        },
+      ],
+    },
     {
       //路由重定向
       path: "/",
@@ -142,8 +163,17 @@ router.beforeEach(async (to, from, next) => {
       }
     }
   } else {
-    //如果没有token则暂时next，支付页面等在做判断
-    next();
+    //如果没有token则暂时next，订单详情、支付、支付成功、个人中心页面等在做判断
+    if (
+      to.path === "/trade" ||
+      to.path === "/pay" ||
+      to.path.includes("/center")
+    ) {
+      next("/login?to=" + to.path); //把要去的地址保存在路由上
+      alert("请先登录");
+    } else {
+      next();
+    }
   }
 });
 

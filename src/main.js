@@ -7,6 +7,11 @@ import MyPagination from "@/components/MyPagination";
 import store from "@/store";
 import "@/mock/serverMock";
 
+//获取全部的api
+import * as api from "@/api";
+//共享api
+Vue.prototype.$api = api;
+
 //全局加载elementUI的CSS
 // import "element-ui/lib/theme-chalk/index.css";
 

@@ -106,3 +106,8 @@ export const getOrderDetile = (orderId) => {
 export const getPayInfo = (orderId) => {
   return myAxios.get(`/payment/weixin/queryPayStatus/${orderId}`);
 };
+
+//获取我的订单列表
+export const getCenterOrderList = (page, limit) => {
+  return myAxios.get(`/order/auth/${page}/${limit}`);
+};

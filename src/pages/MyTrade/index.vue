@@ -22,15 +22,26 @@
       <div class="line"></div>
       <h5 class="pay">支付方式</h5>
       <div class="address clearFix">
-        <span class="username selected">在线支付</span>
-        <span class="username" style="margin-left: 5px">货到付款</span>
+        <span
+          class="username"
+          :class="{ selected: payMethods }"
+          @click="payMethods = true"
+          >在线支付</span
+        >
+        <span
+          class="username"
+          style="margin-left: 5px"
+          :class="{ selected: !payMethods }"
+          @click="payMethods = false"
+          >货到付款</span
+        >
       </div>
       <div class="line"></div>
       <h5 class="pay">送货清单</h5>
       <div class="way">
         <h5>配送方式</h5>
-        <div class="info clearFix">
-          <span class="s1">天天快递</span>
+        <div class="info clearFix address clearFix">
+          <span class="s1 username selected">天天快递</span>
           <p>配送时间：预计8月10日（周三）09:00-15:00送达</p>
         </div>
       </div>
@@ -116,6 +127,7 @@ export default {
     return {
       BuyerMessage: "",
       isChecked: "3",
+      payMethods: true,
     };
   },
   mounted() {

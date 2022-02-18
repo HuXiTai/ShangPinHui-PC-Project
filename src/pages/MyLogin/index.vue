@@ -100,7 +100,13 @@ export default {
         try {
           const re = await this.getLoginToken({ phone, password });
           alert("登录成功");
-          this.$router.push("/");
+          //判断有没有要去的地址
+          if (this.$route.query.to) {
+            //有的话就直接跳转要去的地址
+            this.$router.push(this.$route.query.to);
+          } else {
+            this.$router.push("/");
+          }
         } catch (e) {
           alert(e.message);
         }

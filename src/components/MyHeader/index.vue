@@ -9,7 +9,9 @@
           <p v-if="$store.state.user.userInfo">
             <span>用户:</span>
             <!-- 一级声明式路由导航区 -->
-            <a to="/login">{{ $store.state.user.userInfo.name }}</a>
+            <router-link to="/center">{{
+              $store.state.user.userInfo.name
+            }}</router-link>
             <a to="/register" class="register" @click="logout">退出登录</a>
           </p>
           <p v-else>
@@ -20,7 +22,7 @@
           </p>
         </div>
         <div class="typeList">
-          <a href="###">我的订单</a>
+          <router-link to="/center">我的订单</router-link>
           <router-link to="/cart/cartList">我的购物车</router-link>
           <a href="###">我的尚品汇</a>
           <a href="###">尚品汇会员</a>
