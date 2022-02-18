@@ -3,19 +3,33 @@ import VueRouter from "vue-router";
 import store from "@/store";
 
 //引入各个需要路由的组件
-import MyHome from "@/pages/MyHome";
-import MyLogin from "@/pages/MyLogin";
-import MyRegister from "@/pages/MyRegister";
-import MySearch from "@/pages/MySearch";
-import MyDetail from "@/pages/MyDetail";
-import MyAddCartSuccess from "@/pages/MyAddCartSuccess";
-import MyShopCart from "@/pages/MyShopCart";
-import MyPay from "@/pages/MyPay";
-import MyPaySuccess from "@/pages/MyPaySuccess";
-import MyTrade from "@/pages/MyTrade";
-import MyCenter from "@/pages/MyCenter";
-import MyGroupOrder from "@/pages/MyCenter/MyGroupOrder";
-import MyMyOrder from "@/pages/MyCenter/MyMyOrder";
+// import MyHome from "@/pages/MyHome";
+// import MyLogin from "@/pages/MyLogin";
+// import MyRegister from "@/pages/MyRegister";
+// import MySearch from "@/pages/MySearch";
+// import MyDetail from "@/pages/MyDetail";
+// import MyAddCartSuccess from "@/pages/MyAddCartSuccess";
+// import MyShopCart from "@/pages/MyShopCart";
+// import MyPay from "@/pages/MyPay";
+// import MyPaySuccess from "@/pages/MyPaySuccess";
+// import MyTrade from "@/pages/MyTrade";
+// import MyCenter from "@/pages/MyCenter";
+// import MyGroupOrder from "@/pages/MyCenter/MyGroupOrder";
+// import MyMyOrder from "@/pages/MyCenter/MyMyOrder";
+//使用路透懒加载
+const MyHome = () => import("@/pages/MyHome");
+const MyLogin = () => import("@/pages/MyLogin");
+const MyRegister = () => import("@/pages/MyRegister");
+const MySearch = () => import("@/pages/MySearch");
+const MyDetail = () => import("@/pages/MyDetail");
+const MyAddCartSuccess = () => import("@/pages/MyAddCartSuccess");
+const MyShopCart = () => import("@/pages/MyShopCart");
+const MyPay = () => import("@/pages/MyPay");
+const MyPaySuccess = () => import("@/pages/MyPaySuccess");
+const MyTrade = () => import("@/pages/MyTrade");
+const MyCenter = () => import("@/pages/MyCenter");
+const MyGroupOrder = () => import("@/pages/MyCenter/MyGroupOrder");
+const MyMyOrder = () => import("@/pages/MyCenter/MyMyOrder");
 
 //重写push和repalce
 const lastPush = VueRouter.prototype.push;
@@ -84,6 +98,17 @@ const router = new VueRouter({
       name: "success",
       path: "/success/:skuNum?",
       component: MyAddCartSuccess,
+      //路由独享的守卫
+      beforeEnter: (to, from, next) => {
+        let { skuNum } = to.params;
+        let skuInfo = sessionStorage.getItem("skuInfo_key");
+        //判断是否携带需要的数据选择放行
+        if (skuNum && skuInfo) {
+          next();
+        } else {
+          next(false);
+        }
+      },
     },
     //购物车页面
     {
@@ -96,18 +121,45 @@ const router = new VueRouter({
       name: "pay",
       path: "/pay",
       component: MyPay,
+      //路由独享的守卫
+      beforeEnter: (to, from, next) => {
+        //判断是否从/trade过来选择放行
+        if (from.path === "/trade") {
+          next();
+        } else {
+          next(false);
+        }
+      },
     },
     //支付完成页面
     {
       name: "paysuccess",
       path: "/paysuccess",
       component: MyPaySuccess,
+      //路由独享的守卫
+      beforeEnter: (to, from, next) => {
+        //判断是否从/pay过来选择放行
+        if (from.path === "/pay") {
+          next();
+        } else {
+          next(false);
+        }
+      },
     },
     //订单详情页面
     {
       name: "trade",
       path: "/trade",
       component: MyTrade,
+      //路由独享的守卫
+      beforeEnter: (to, from, next) => {
+        //判断是否从/cart/cartList过来选择放行
+        if (from.path === "/cart/cartList") {
+          next();
+        } else {
+          next(false);
+        }
+      },
     },
 
     //个人中心页面

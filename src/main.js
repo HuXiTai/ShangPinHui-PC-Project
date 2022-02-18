@@ -6,6 +6,19 @@ import MySwiper from "@/components/MySwiper";
 import MyPagination from "@/components/MyPagination";
 import store from "@/store";
 import "@/mock/serverMock";
+import VueLazyload from "vue-lazyload";
+import loading from "@/assets/images/loading.gif";
+
+//图片懒加载工具的使用
+Vue.use(VueLazyload, {
+  preLoad: 1.3,
+  error: "dist/error.png",
+  loading,
+  attempt: 1,
+});
+
+//引入表单校验
+import "@/utils/veeValidate";
 
 //获取全部的api
 import * as api from "@/api";

@@ -92,7 +92,7 @@
                 <div class="list-wrap">
                   <div class="p-img">
                     <a href="javascript:;" @click="toDetail(item.id)"
-                      ><img :src="item.defaultImg"
+                      ><img v-lazy="item.defaultImg"
                     /></a>
                   </div>
                   <div class="price">
@@ -159,7 +159,7 @@ export default {
 
         order: "1:asc", //默认排序
         pageNo: 1, //默认请求的页码
-        pageSize: 5, //每次请求的数据
+        pageSize: 30, //每次请求的数据
       },
     };
   },
