@@ -29,7 +29,9 @@ Vue.prototype.$api = api;
 // import "element-ui/lib/theme-chalk/index.css";
 
 //按需引入组件
-import { MessageBox, Message } from "element-ui";
+import { MessageBox, Message, Button, Input } from "element-ui";
+Vue.use(Button);
+Vue.component(Input.name, Input);
 
 //全局注册MyNavType组件，因为有多个组件会用到它
 Vue.component("MyNavType", MyNavType);
